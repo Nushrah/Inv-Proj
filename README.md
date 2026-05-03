@@ -104,8 +104,7 @@ Prisma models `User`, `Investment`, `Transaction` with PostgreSQL **foreign keys
 - **Ownership:** data scoped to the authenticated user.
 - **Risk:** concentration by current value per `AssetType` (PRD thresholds 50% / 75%).
 
-## Known limitations
+## Future additiond
 
-- No live market or brokerage APIs (per PRD).
-- No refresh-token rotation or RBAC.
-- Compose `JWT_SECRET` / DB password are for **local demo only**.
+- Live market or brokerage APIs (per PRD).
+- Refresh-token rotation or RBAC.
