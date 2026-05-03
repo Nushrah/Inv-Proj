@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AssetType {
+  STOCK
+  BOND
+  MUTUAL_FUND
+  ETF
+  CASH
+  OTHER
+}
+
+enum TransactionType {
+  BUY
+  SELL
+}
+
+model User {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  investments  Investment[]
+  transactions Transaction[]
+
+  @@map("users")
+}
+
+model Investment {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  assetName      String    @map("asset_name") @db.VarChar(100)
+  symbol         String    @db.VarChar(20)
+  assetType      AssetType @map("asset_type")
+  quantity       Decimal   @db.Decimal(18, 4)
+  purchasePrice  Decimal   @map("purchase_price") @db.Decimal(18, 4)
+  currentPrice   Decimal   @map("current_price") @db.Decimal(18, 4)
+  purchaseDate   DateTime  @map("purchase_date") @db.Date
+  notes          String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId], map: "idx_investments_user_id")
+  @@index([symbol], map: "idx_investments_symbol")
+  @@map("investments")
+}
+
+model Transaction {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String            @map("user_id") @db.Uuid
+  investmentId    String?           @map("investment_id") @db.Uuid
+  transactionType TransactionType   @map("transaction_type")
+  quantity        Decimal           @db.Decimal(18, 4)
+  price           Decimal           @db.Decimal(18, 4)
+  transactionDate DateTime          @map("transaction_date") @db.Date
+  notes           String?
+  createdAt       DateTime          @default(now()) @map("created_at")
+
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  investment Investment? @relation(fields: [investmentId], references: [id], onDelete: SetNull)
+
+  @@index([userId], map: "idx_transactions_user_id")
+  @@index([transactionDate(sort: Desc)], map: "idx_transactions_date")
+  @@map("transactions")
+}
