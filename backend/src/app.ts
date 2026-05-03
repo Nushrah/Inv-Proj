@@ -4,6 +4,7 @@ import { errorHandler } from "./middleware/error.middleware.js";
 import { authRouter } from "./routes/auth.routes.js";
 import { investmentRouter } from "./routes/investment.routes.js";
 import { portfolioRouter } from "./routes/portfolio.routes.js";
+import { transactionRouter } from "./routes/transaction.routes.js";
 
 export function createApp() {
   const app = express();
@@ -17,6 +18,11 @@ export function createApp() {
   app.use("/api/auth", authRouter);
   app.use("/api/investments", investmentRouter);
   app.use("/api/portfolio", portfolioRouter);
+  app.use("/api/transactions", transactionRouter);
+
+  app.use((_req, res) => {
+    res.status(404).json({ message: "Not found" });
+  });
 
   app.use(errorHandler);
 
