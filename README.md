@@ -1,14 +1,6 @@
-# Portfolio Management Dashboard
-
-Full-stack portfolio dashboard for the Manulife Technology Industrial Placement assessment: JWT auth, portfolio metrics, risk concentration, investments, and transaction history.
-
-**Stack:** React + TypeScript + Vite, Express + TypeScript, PostgreSQL + Prisma.
-
-Business and assessment PDFs are **confidential** (employer / interview use only); do not redistribute them.
-
 ## How this maps to the briefs
 
-**Official assessment (Technology Industrial Placement Program 2026)** — required items:
+Required items:
 
 | # | Requirement | Where it lives |
 |---|-------------|----------------|
@@ -26,7 +18,7 @@ Business and assessment PDFs are **confidential** (employer / interview use only
 
 ## Deliverable: run with Docker Compose
 
-The assessment deliverable is **Docker Compose**. Run the whole system (database, API, UI) with:
+Run the whole system (database, API, UI) with:
 
 ```bash
 docker compose up --build
